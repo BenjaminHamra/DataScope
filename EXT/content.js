@@ -15,7 +15,6 @@ function saveData(text) {
     }
 }
 
-//
 function checkKeyboard(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
         const el = document.activeElement;
@@ -28,7 +27,6 @@ function checkKeyboard(e) {
     }
 }
 
-//
 function configEditor(element) {
 
     if (element && element.getAttribute('data-extension-configurado') !== 'true') {
@@ -53,7 +51,6 @@ function configEditor(element) {
     }
 }
 
-//
 function attachButtonListener(btn, force = false) {
     if (!btn) return;
 
@@ -74,7 +71,6 @@ function handleButtonClick() {
     }
 }
 
-//
 function isButtonValid(btn) {
     if (!btn) return false;
     return document.contains(btn) && btn.offsetParent !== null;
@@ -96,12 +92,19 @@ let heuristics = {
     },
     BUTTON: {
         Id: { "submit": 30, "button": 10 },
-        Class: { "submit": 20, "button": 10, "btn": 10, "send": 30 }, // Corregido "button"
-        Arialabel: { "send": 50, "message": 45, "enviar": 50, "mensaje": 45 } // Añadido español
+        Class: { "submit": 20, "button": 10, "btn": 10, "send": 30 }, 
+        Arialabel: { "send": 50, "message": 45, "enviar": 50, "mensaje": 45 }
+    },
+    ANSWER: {
+        Id: {"markdown": 50, "content": 50, "model": 50, "response": 50, "message": 50},
+        Class: {"ai": 50, "message": 50},
+        DataContent: {"ai": 50, "message": 50},
+        DataTestId: {"ai": 50, "message": 50},
+        DataMessageAuthorRole: {"assistant": 100}
     }
 }
 
-//
+
 function rank(element, type) {
     let score = 0;
     let config = heuristics[type];
