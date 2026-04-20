@@ -1,14 +1,32 @@
+/*HAY QUE QUEDARSE CON EL MAT-ICON O LO QUE SEA EL PRIME HALLAZGO DE LA FUNCION DE FINDBUTTON AL ESCRIBIR POR PRIMER VEZ EN EL EDITOR
+DESPUES SOLO HAY QUE VOLVER A ENCONTRARLO LA **SIGUIENTE VEZ QUE SE ESCRIBE EN EL EDITOR** Y AHI BUSCAR EL BOTON
+
+HAY QUE PONER UN SOLO LISTENER PARA LOS BOTONES **EN EL ANCESTRO COMUN DE TODOS ELLOS**
+*/
+
 let editor
 let editorQuery
 let editorContent
 let oldEditorContent
 
 let sendButton
+let sendButtonCandidates = []
+let sendButtonFingerPrint
 let sendButtonQuery
+let listenersAttached = false
+let messageNumber = 0
 
 function configEditor() {
     editor.addEventListener('input', (e) => {
         editorContent = e.target.textContent
+
+        if (!sendButton && !listenersAttached) {
+            console.log("chequeando botones")
+            findButton(editor, 5)
+            attachListeners()
+            listenersAttached = true
+        }
+
         oldEditorContent = editorContent
     })
 }
@@ -32,24 +50,41 @@ function checkSameElement(element, originalPrint) {
         currentPrint.father === originalPrint.father;
 }
 
-function findButton(element) {
-    let node = element
-    let button
-    let buttonFound = false
+function attachListeners() {
+    sendButtonCandidates.forEach((e) => {
+        e.addEventListener('click', setSendButton)
+        console.log('Event listener listo')
+    })
+}
 
-    while (node && !buttonFound) {
-        if (node.tagName === 'BUTTON') {
-            button = node
-            buttonFound = true
-        }
-        else {
-            node = node.parentElement
+function cleanButtonCandidates() {
+    sendButtonCandidates.forEach((e) => {
+        e.removeEventListener('click', setSendButton)
+        console.log('Event listener listo')
+    })
+
+    sendButtonCandidates = []
+}
+
+function findButton(start, levels) {
+
+    let ancestro = start;
+    for (let i = 0; i < levels; i++) {
+        if (ancestro) {
+            ancestro = ancestro.parentElement;
+
+            const botones = ancestro.querySelectorAll('button');
+
+            if (botones.length > 0) {
+                sendButtonCandidates.push(...botones);
+            } else {
+                console.log("No tiene botones.");
+            }
         }
     }
 
-    return button
+    console.log(sendButtonCandidates)
 }
-
 
 const setEditor = (e) => {
 
@@ -66,28 +101,28 @@ const setEditor = (e) => {
 
 const setSendButton = (e) => {
 
-    let lastClick = e.target;
-    const nearButton = findButton(lastClick)
+    let buttonCandidate = e.target
 
-    console.log("CLICK DETECTADO EN: ", lastClick)
-    console.log("BOTON CERCANO: ", nearButton)
+    if (buttonCandidate.tagName != 'BUTTON') {
+        cleanButtonCandidates()
+        findButton(buttonCandidate, 5)
+        buttonCandidate = sendButtonCandidates[0]
+    }
 
+    console.log("CLICK DETECTADO EN: ", buttonCandidate)
 
     setTimeout(() => {
-        if (editor && editor.textContent === "" && nearButton) {
-            sendButton = nearButton
-            sendButtonQuery = getDigitalPrint(sendButton)
-            console.log("BOTÓN DETECTADO:", sendButtonQuery)
-            document.removeEventListener('click', setSendButton)
+        if (editor && editor.textContent === "") {
+            sendButtonFingerPrint = getDigitalPrint(buttonCandidate)
+            console.log("FINGUERPRINT:", sendButtonQuery)
+            cleanButtonCandidates()
         }
     }, 100)
+
+    messageNumber += 1
 }
 
 document.addEventListener('focusin', setEditor)
-document.addEventListener('click', setSendButton, { capture: true })
-document.addEventListener('click', (e) => {
-    console.log("RAW CLICK:", e.target)
-}, { capture: true })
 
 const observer = new MutationObserver((mutationList) => {
 
