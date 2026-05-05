@@ -7,10 +7,10 @@ const config = {
     user: 'dbo',
     password: 'dbo',
     server:'localhost',
-    databse:'placeholderDbDatascope',
+    database:'placeholderDbDatascope',
     option:{
         trustedconnection: true,
-        enableArithAort: true,
+        enableArithAbort: true,
         instancename: 'SQLEXPRESS'
     },
     port: 55892

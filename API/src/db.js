@@ -5,7 +5,7 @@ export const pool=new pg.Pool({
     host: "localhost",
     password: "root",
     database: "DataScope",
-    port: "5432"
+    port: 5432
 })
 
 //en esta parte probablemente haya que cambiar cosas cuando corra en el colegio

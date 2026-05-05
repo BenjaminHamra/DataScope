@@ -17,7 +17,9 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mssql": "^12.2.1",
-    "pg": "^8.20.0"
+    "natural": "^8.1.1",
+    "pg": "^8.20.0",
+    "silabajs": "^2.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
