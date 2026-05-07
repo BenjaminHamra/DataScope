@@ -11,6 +11,7 @@
     "start": "node src/index.js"
   },
   "dependencies": {
+    "@xenova/transformers": "^2.0.1",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.2",
     "compromise": "^14.15.0",

@@ -2,7 +2,7 @@ import { pool } from "../db.js";
 import bcrypt from "bcrypt";
 import { hashRounds, tokenCompanyPassword, tokenWholePassword } from "../config.js"
 import jwt from "jsonwebtoken";
-import { setPrompt, getWords, tokenize, calcularComplejidad, clasificate } from "../utils/analizer.js"
+import { setPrompt, getWords, tokenize, calcularComplejidad, clasificate, initClasificador } from "../utils/analizer.js"
 
 export const initialPage = async (req, res) => {
     console.log("Contenido recibido:", req.body.content);
@@ -10,7 +10,9 @@ export const initialPage = async (req, res) => {
     getWords()
     tokenize()
     const complejidad = calcularComplejidad()
-    const clasificacion = await clasificate()
+    await initClasificador();
+    const clasificador = await clasificate();
+
     //clasificate()
     res.send("funciono");
 };
